@@ -1,0 +1,13 @@
+---
+users:
+  - username: user1
+    group: pogi
+
+  - username: user2
+    group: pogi
+
+  - username: user3
+    group: gwapo
+
+  - username: user4
+    group: gwapo

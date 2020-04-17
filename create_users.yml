@@ -1,0 +1,8 @@
+---
+
+- name: create Users
+  hosts: all
+  remote_user: centos
+  become: true
+  roles:
+    - ssh

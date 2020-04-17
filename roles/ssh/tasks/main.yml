@@ -1,0 +1,36 @@
+---
+   - include_vars: users.yml
+
+   - name: Create Group
+     group:
+       name: "{{ item.group }}"
+       state: present
+     with_items: "{{ users }}"
+
+   - name: Create Users
+     user: 
+       name: "{{ item.username }}"
+       groups: 
+         - "{{ item.group }}"
+         - "{{ item.username }}"
+       shell: /bin/bash 
+       createhome: yes
+     with_items: "{{ users }}"
+
+   - name: Setup Keys 
+     authorized_key: 
+       user: "{{ item.username }}"
+       key: "{{ lookup('file', 'files/{{ item.username }}.pub') }}"
+       state: present
+     with_items: '{{users}}'
+
+   - name: Create Sudoer File For Each User
+     lineinfile:
+       dest: "/etc/sudoers.d/{{ item.username }}"
+       owner: root
+       group: root
+       mode: 0440
+       create: yes
+       line: "{{ item.username }} ALL=(ALL) NOPASSWD: ALL"
+       state: present
+     with_items: "{{ users }}"
